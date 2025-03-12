@@ -8,7 +8,7 @@ import { LibUtil } from "../Libraries/LibUtil.sol";
 import { ReentrancyGuard } from "../Helpers/ReentrancyGuard.sol";
 import { SwapperV2 } from "../Helpers/SwapperV2.sol";
 import { Validatable } from "../Helpers/Validatable.sol";
-import { ECDSA } from "solady/utils/ECDSA.sol";
+import { ECDSA } from "../Libraries/ECDSA.sol";
 
 /// @title Relay Facet
 /// @author LI.FI (https://li.fi)

@@ -20,6 +20,9 @@ library LibAsset {
 
     address internal constant NATIVE_ASSETID = NULL_ADDRESS; //address(0)
 
+    address internal constant NON_EVM_ADDRESS =
+        0x11f111f111f111F111f111f111F111f111f111F1;
+
     /// @notice Gets the balance of the inheriting contract for the given asset
     /// @param assetId The asset identifier to get the balance of
     /// @return Balance held by contracts using this library

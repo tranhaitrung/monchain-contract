@@ -44,34 +44,50 @@ async function main() {
   await acrossFacetV3.deployed()
   console.log("AcrossFacetV3 deployed to:", acrossFacetV3.address);
 
+  // 3. Deploy RelayReceiver
+  console.info("\n\nDEPLOYING RelayReceiver ....");
+  const RelayReceiver = await ethers.getContractFactory("RelayReceiver");
+  const relayReceiver = await RelayReceiver.deploy(owner.address);
+  await relayReceiver.deployed()
+  console.log("RelayFacet deployed to:", relayReceiver.address);
+
+  // 3. Deploy RelayFacet
+  console.info("\n\nDEPLOYING RelayFacet ....");
+  const RelayFacet = await ethers.getContractFactory("RelayFacet");
+  const relayFacet = await RelayFacet.deploy(relayReceiver.address, owner.address);
+  await relayFacet.deployed()
+  console.log("RelayFacet deployed to:", relayFacet.address);
+
   console.info("Deploy done")
 
-  // 4. Thêm AcrossFacetV3 làm facet vào LiFiDiamond
-  const diamondCut = await ethers.getContractAt("IDiamondCut", lifiDiamond.address);
-  const acrossFacetInterface = new Interface([
-    "function startBridgeTokensViaAcrossV3((bytes32,string,address,address,uint256,uint256,bool,bytes), (address,address,address,uint256,address,uint32,uint32,uint32,bytes)) external payable",
-    "function swapAndStartBridgeTokensViaAcrossV3((bytes32,string,address,address,uint256,uint256,bool,bytes), (address,bytes32,uint256,address)[], (address,address,address,uint256,address,uint32,uint32,uint32,bytes)) external payable",
-  ]);
-  const functionSelectors = [
-    acrossFacetInterface.getFunction("startBridgeTokensViaAcrossV3").format(),
-    acrossFacetInterface.getFunction("swapAndStartBridgeTokensViaAcrossV3").format(),
-  ];
+  // // 4. Thêm AcrossFacetV3 làm facet vào LiFiDiamond
+  // const diamondCut = await ethers.getContractAt("IDiamondCut", lifiDiamond.address);
+  // const acrossFacetInterface = new Interface([
+  //   "function startBridgeTokensViaAcrossV3((bytes32,string,address,address,uint256,uint256,bool,bytes), (address,address,address,uint256,address,uint32,uint32,uint32,bytes)) external payable",
+  //   "function swapAndStartBridgeTokensViaAcrossV3((bytes32,string,address,address,uint256,uint256,bool,bytes), (address,bytes32,uint256,address)[], (address,address,address,uint256,address,uint32,uint32,uint32,bytes)) external payable",
+  // ]);
+  // const functionSelectors = [
+  //   acrossFacetInterface.getFunction("startBridgeTokensViaAcrossV3").format(),
+  //   acrossFacetInterface.getFunction("swapAndStartBridgeTokensViaAcrossV3").format(),
+  // ];
 
-  const cut = [{
-    facetAddress: acrossFacetV3.address,
-    action: 0, // 0 = Add
-    functionSelectors: functionSelectors,
-  }];
+  // const cut = [{
+  //   facetAddress: acrossFacetV3.address,
+  //   action: 0, // 0 = Add
+  //   functionSelectors: functionSelectors,
+  // }];
 
-  const tx = await diamondCut.diamondCut(cut, ethers.constants.AddressZero, "0x");
-  await tx.wait();
-  console.log("Added AcrossFacetV3 as facet to LiFiDiamond");
+  // const tx = await diamondCut.diamondCut(cut, ethers.constants.AddressZero, "0x");
+  // await tx.wait();
+  // console.log("Added AcrossFacetV3 as facet to LiFiDiamond");
 
 
   const contracts = {
     DiamondCutFacet: diamondCutFacet.address,
     LiFiDiamond: lifiDiamond.address,
-    AcrossFacetV3: acrossFacetV3.address
+    AcrossFacetV3: acrossFacetV3.address,
+    RelayReceiver: relayReceiver.address,
+    RelayFacet: relayFacet.address
   }
   fs.writeFileSync(`./deployments/${networkName}.json`, JSON.stringify(contracts, null, 2))
 }

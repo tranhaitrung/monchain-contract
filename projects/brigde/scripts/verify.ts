@@ -27,24 +27,36 @@ async function main() {
   // console.log('Verify moonToken success')
   // await sleep(1000)
   
-  console.log("\n====================================")
-  // Verify USDT
-  console.log('Verify DiamondCutFacet: ', deployedContracts.DiamondCutFacet)
-  await verifyContract(deployedContracts.DiamondCutFacet)
-  console.log('Verify DiamondCutFacet success')
+  // console.log("\n====================================")
+  // // Verify USDT
+  // console.log('Verify DiamondCutFacet: ', deployedContracts.DiamondCutFacet)
+  // await verifyContract(deployedContracts.DiamondCutFacet)
+  // console.log('Verify DiamondCutFacet success')
+  // await sleep(1000)
+
+  // console.log("\n====================================")
+  // // Verify LiFiDiamond
+  // console.log('Verify LiFiDiamond: ', deployedContracts.LiFiDiamond)
+  // await verifyContract(deployedContracts.LiFiDiamond, [owner.address, deployedContracts.DiamondCutFacet])
+  // console.log('Verify LiFiDiamond success')
+  // await sleep(1000)
+  
+  // // Verify LiFiDiamond
+  // console.log('Verify AcrossFacetV3: ', deployedContracts.AcrossFacetV3)
+  // await verifyContract(deployedContracts.AcrossFacetV3, [config.spokePoolAddress, config.WNATIVE])
+  // console.log('Verify AcrossFacetV3 success')
+  // await sleep(1000)
+
+  // Verify RelayReceiver
+  console.log('Verify RelayReceiver: ', deployedContracts.RelayReceiver)
+  await verifyContract(deployedContracts.RelayReceiver, [owner.address])
+  console.log('Verify RelayReceiver success')
   await sleep(1000)
 
-  console.log("\n====================================")
-  // Verify LiFiDiamond
-  console.log('Verify LiFiDiamond: ', deployedContracts.LiFiDiamond)
-  await verifyContract(deployedContracts.LiFiDiamond, [owner.address, deployedContracts.DiamondCutFacet])
-  console.log('Verify LiFiDiamond success')
-  await sleep(1000)
-  
-  // Verify LiFiDiamond
-  console.log('Verify AcrossFacetV3: ', deployedContracts.AcrossFacetV3)
-  await verifyContract(deployedContracts.AcrossFacetV3, [config.spokePoolAddress, config.WNATIVE])
-  console.log('Verify AcrossFacetV3 success')
+  // Verify RelayFacet
+  console.log('Verify RelayFacet: ', deployedContracts.RelayFacet)
+  await verifyContract(deployedContracts.RelayFacet, [deployedContracts.RelayReceiver, owner.address])
+  console.log('Verify RelayFacet success')
   await sleep(1000)
 }
 
